@@ -35,6 +35,7 @@ FetchContent_Declare(PhantomStyle
 FetchContent_MakeAvailable(PhantomStyle)
 
 add_qtc_plugin(PhantomStylePlugin
+  PLUGIN_PATH "./package/PhantomStylePlugin"
   LONG_DESCRIPTION_MD README.md
   PLUGIN_DEPENDS
     QtCreator::Core
