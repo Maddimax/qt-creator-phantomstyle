@@ -214,18 +214,12 @@ jobs:
         endif()
 
     - name: Download Qt Creator
+      id: qt_creator
       uses: qt-creator/install-dev-package@v1.6
       with:
         version: ${{ env.QT_CREATOR_VERSION }}
         unzip-to: 'qtcreator'
         platform: ${{ matrix.config.platform }}
-
-    - name: Extract Qt Creator
-      id: qt_creator
-      shell: cmake -P {0}
-      run: |
-        file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}/qtcreator" qtc_dir)
-        file(APPEND "$ENV{GITHUB_OUTPUT}" "qtc_dir=${qtc_dir}")
 
     - name: Build
       shell: cmake -P {0}
@@ -254,7 +248,7 @@ jobs:
 
         set(build_plugin_py "scripts/build_plugin.py")
         foreach(dir "share/qtcreator/scripts" "Qt Creator.app/Contents/Resources/scripts" "Contents/Resources/scripts")
-          if(EXISTS "${{ steps.qt_creator.outputs.qtc_dir }}/${dir}/build_plugin.py")
+          if(EXISTS "${{ steps.qt_creator.outputs.path }}/${dir}/build_plugin.py")
             set(build_plugin_py "${dir}/build_plugin.py")
             break()
           endif()
@@ -271,12 +265,12 @@ jobs:
         execute_process(
           COMMAND python
             -u
-            "${{ steps.qt_creator.outputs.qtc_dir }}/${build_plugin_py}"
+            "${{ steps.qt_creator.outputs.path }}/${build_plugin_py}"
             --name "$ENV{PLUGIN_NAME}-$ENV{QT_CREATOR_VERSION}-${{ matrix.config.artifact }}"
             --src .
             --build build
             --qt-path "${{ steps.qt.outputs.qt_dir }}"
-            --qtc-path "${{ steps.qt_creator.outputs.qtc_dir }}"
+            --qtc-path "${{ steps.qt_creator.outputs.path }}"
             --output-path "$ENV{GITHUB_WORKSPACE}"
             ${additional_config}
           RESULT_VARIABLE result
