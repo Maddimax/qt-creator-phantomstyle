@@ -1,7 +1,7 @@
 {
     "Id" : "teststyle",
     "Name" : "Test Style",
-    "Version" : "${IDE_VERSION}",
+    "Version" : "15.0.100",
     "CompatVersion" : "${IDE_VERSION_COMPAT}",
     "Vendor" : "Marcus Tillmanns",
     "VendorId" : "marcustillmanns",
